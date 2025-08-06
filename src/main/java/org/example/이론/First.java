@@ -41,20 +41,66 @@ public class First {
 //            System.out.println(result + "명 회원이 추가됨");
 
             // 2) DB 데이터 조회(READ - 전체 조회)
-            String sql = "SELECT * FROM members";
-            stmt = conn.createStatement();
-            rs = stmt.executeQuery(sql); // SELECT 실행 - 반환은 ResultSet 객체
+//            String sql = "SELECT * FROM members";
+//            stmt = conn.createStatement();
+//            rs = stmt.executeQuery(sql); // SELECT 실행 - 반환은 ResultSet 객체
+//
+//            while (rs.next()) { // rs.next(): 다음 행 존재 여부 확인 boolean값 반환
+//                int id = rs.getInt("id");
+//                String name = rs.getString("name");
+//                String email = rs.getString("email");
+//                System.out.println("id: " + id + "/ name: " + name + "/ email: " + email);
+//            }
 
-            while (rs.next()) { // rs.next(): 다음 행 존재 여부 확인 boolean값 반환
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                String email = rs.getString("email");
-                System.out.println("id: " + id + "/ name: " + name + "/ email: " + email);
-            }
+            // 3) DB 데이터 조회(READ - 단건 조회)
+//            String sql = "SELECT * FROM members WHERE id = ?";
+//            pstmt = conn.prepareStatement(sql);
+//            pstmt.setInt(1, 3); // parnmeter 동적 파아미터의 위치값 - 1부터 시작
+//
+//            rs = pstmt.executeQuery();
+//
+//            if (rs.next()) {
+//                int id = rs.getInt("id");
+//                String name = rs.getString("name");
+//                String email = rs.getString("email");
+//                System.out.println(id + " | " + name + " | " + email);
+//            } else {
+//                System.out.println("해당 ID의 회원이 없습니다.");
+//            }
+
+            // 4) DB 데이터 수정 (UPDATE)
+//            String sql = "UPDATE members SET email = ? where id = ?";
+//            pstmt = conn.prepareStatement(sql);
+//            pstmt.setString(1, "newEmail.example.com");
+//            pstmt.setInt(2, 1);
+//
+//            int updateResult = pstmt.executeUpdate();
+//            System.out.println(updateResult + "명 수정됨");
+
+            // 5) DB 데이터 삭제 (DELETE)
+            String sql = "DELETE FROM members WHERE id = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, 1);
+            int deleteResult = pstmt.executeUpdate();
+            System.out.println(deleteResult + "명 삭제됨");
 
         } catch (Exception e) {
             System.out.println("DB 와의 커넥션 중 예외 발생");
             e.getMessage(); // - 예외 발생 시 예외 메시지 + 호출 스택 정보 출력 (예외 발생지 출력)
+        } finally {
+            // 자원 해제 (자바 7버전 이상 - 자동 자원 해제) >> 생략 가능
+            try {
+                if (conn != null && stmt != null && rs != null) {
+                    // DB connection이 모두 존재한다면
+                    rs.close();
+                    stmt.close();
+                    conn.close();
+                    System.out.println("DB 연결 종료");
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
